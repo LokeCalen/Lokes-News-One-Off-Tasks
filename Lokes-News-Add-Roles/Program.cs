@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Client;
 using System;
 
 namespace Lokes_News_Add_Roles
@@ -10,11 +11,13 @@ namespace Lokes_News_Add_Roles
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly LokesNewsDbContext _context;
 
-        public Program(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public Program(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, LokesNewsDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         static void Main(string[] args)
@@ -35,13 +38,21 @@ namespace Lokes_News_Add_Roles
                 .AddEntityFrameworkStores<GetIdentityDbContext>();
 
             var serviceProvider = services.BuildServiceProvider();
-            var program = new Program(serviceProvider.GetRequiredService<UserManager<IdentityUser>>(), serviceProvider.GetRequiredService<RoleManager<IdentityRole>>());
+
+            var program = new Program(
+                serviceProvider.GetRequiredService<UserManager<IdentityUser>>(), 
+                serviceProvider.GetRequiredService<RoleManager<IdentityRole>>(),
+                serviceProvider.GetRequiredService<LokesNewsDbContext>()
+            );
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // Add methods bellow and call them here from the program object and using .Wait():
 
             //program.AddRolesAsync().Wait();
+            //program.AddSubscriptionTypesAsync().Wait();
+            //program.AddCategoriesAsync().Wait();
+
 
             // Remember to comment out the called Task after running it once
         }
@@ -62,6 +73,67 @@ namespace Lokes_News_Add_Roles
                     await _roleManager.CreateAsync(role);
                 }
             }
+            return;
+        }
+
+        public async Task AddSubscriptionTypesAsync()
+        {
+            var subTypes = new List<SubscriptionType>
+            {
+                new SubscriptionType 
+                {
+                    TypeName = "Name 1",
+                    Description = "Description 1",
+                    Price = 1.00M
+                },
+                new SubscriptionType
+                {
+                    TypeName = "Name 2",
+                    Description = "Description 2",
+                    Price = 2.00M
+                },
+                new SubscriptionType
+                {
+                    TypeName = "Name 3",
+                    Description = "Description 3",
+                    Price = 3.00M
+                }
+            };
+            foreach (var subType in subTypes)
+            {
+                if (!_context.SubscriptionTypes.Any(st => st.TypeName == subType.TypeName))
+                {
+                    _context.SubscriptionTypes.Add(subType);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return;
+        }
+
+        public async Task AddCategoriesAsync()
+        {
+            var categories = new List<Category>
+            {
+                new Category { Name = "" },
+                new Category { Name = "" },
+                new Category { Name = "" },
+                new Category { Name = "" },
+                new Category { Name = "" }
+            };
+            foreach (var category in categories)
+            {
+                if (!_context.Categories.Any(c => c.Name == category.Name))
+                {
+                    _context.Categories.Add(category);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return;
+        }
+
+        public async Task AddAdminAsync()
+        {
+            //
             return;
         }
     }
