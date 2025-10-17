@@ -45,7 +45,10 @@ public partial class LokesNewsDbContext : DbContext
     {
         modelBuilder.Entity<Article>(entity =>
         {
-            entity.Property(e => e.ContentSummary).HasMaxLength(500);
+            entity.Property(e => e.Author)
+                .HasMaxLength(200)
+                .HasDefaultValue("");
+            entity.Property(e => e.ContentSummary).HasMaxLength(1000);
             entity.Property(e => e.Headline).HasMaxLength(50);
             entity.Property(e => e.ImageUrl).HasMaxLength(200);
             entity.Property(e => e.Slug).HasMaxLength(100);
