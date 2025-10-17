@@ -52,7 +52,7 @@ namespace Lokes_News_Add_Roles
             //program.AddRolesAsync().Wait();
             //program.AddSubscriptionTypesAsync().Wait();
             //program.AddCategoriesAsync().Wait();
-
+            //program.AddAdminAsync().Wait();
 
             // Remember to comment out the called Task after running it once
         }
@@ -133,7 +133,23 @@ namespace Lokes_News_Add_Roles
 
         public async Task AddAdminAsync()
         {
-            //
+            var adminUser = await _context.AspNetUsers.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
+            if (adminUser == null)
+            {
+                var user = new IdentityUser
+                {
+                    UserName = "admin@gmail.com",
+                    Email = "admin@gmail.com",
+                    EmailConfirmed = true,
+                    TwoFactorEnabled = false
+                };
+                await _userManager.CreateAsync(user, "Admin@1234");
+                adminUser = await _context.AspNetUsers.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
+                adminUser!.FirstName = "Admin";
+                adminUser.LastName = "Admin";
+                adminUser.Dob = new DateTime(1990, 1, 1);
+                await _context.SaveChangesAsync();
+            }
             return;
         }
     }
