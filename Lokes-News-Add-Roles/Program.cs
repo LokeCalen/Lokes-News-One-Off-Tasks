@@ -82,19 +82,19 @@ namespace Lokes_News_Add_Roles
             {
                 new SubscriptionType 
                 {
-                    TypeName = "Name 1",
+                    TypeName = "Free",
                     Description = "Description 1",
                     Price = 1.00M
                 },
                 new SubscriptionType
                 {
-                    TypeName = "Name 2",
+                    TypeName = "Standard",
                     Description = "Description 2",
                     Price = 2.00M
                 },
                 new SubscriptionType
                 {
-                    TypeName = "Name 3",
+                    TypeName = "Premium",
                     Description = "Description 3",
                     Price = 3.00M
                 }
