@@ -83,20 +83,20 @@ namespace Lokes_News_Add_Roles
                 new SubscriptionType 
                 {
                     TypeName = "Free",
-                    Description = "Description 1",
-                    Price = 1.00M
+                    Description = "Stay informed with our regular email newsletters.\nPerfect for casual readers who want custom updates delivered to their inbox.",
+                    Price = 0M
                 },
                 new SubscriptionType
                 {
                     TypeName = "Standard",
-                    Description = "Description 2",
-                    Price = 2.00M
+                    Description = "Receive newsletters and gain access to subscriber-only articles.\nIdeal for readers who want to see our exclusive articles reserved for subscribers.",
+                    Price = 49.00M
                 },
                 new SubscriptionType
                 {
                     TypeName = "Premium",
-                    Description = "Description 3",
-                    Price = 3.00M
+                    Description = "Get newsletters, exclusive articles and full archive access.\nFor dedicated readers that want to explore our complete library of articles",
+                    Price = 99.00M
                 }
             };
             foreach (var subType in subTypes)
@@ -114,11 +114,13 @@ namespace Lokes_News_Add_Roles
         {
             var categories = new List<Category>
             {
-                new Category { Name = "" },
-                new Category { Name = "" },
-                new Category { Name = "" },
-                new Category { Name = "" },
-                new Category { Name = "" }
+                new Category { Name = "Sweden" },
+                new Category { Name = "Tech" },
+                new Category { Name = "Ecomomy" },
+                new Category { Name = "Politics" },
+                new Category { Name = "Sport" },
+                new Category { Name = "Lifestyle" },
+                new Category { Name = "Entertainment" }
             };
             foreach (var category in categories)
             {
