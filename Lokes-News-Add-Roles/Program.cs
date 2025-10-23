@@ -24,7 +24,7 @@ namespace Lokes_News_Add_Roles
         {
             //ran: Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=LokesNewsDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -Tables AspNetRoles,AspNetUsers,AspNetUserRoles
 
-            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=LokesNewsDB;Trusted_Connection=True;";
+            var connectionString = "Server=(localdb)\\mssqllocaldb;Database=LokesNewsSprint1DB;Trusted_Connection=True;";
             var services = new ServiceCollection();
 
             services.AddDbContext<LokesNewsDbContext>(
@@ -40,7 +40,7 @@ namespace Lokes_News_Add_Roles
             var serviceProvider = services.BuildServiceProvider();
 
             var program = new Program(
-                serviceProvider.GetRequiredService<UserManager<IdentityUser>>(), 
+                serviceProvider.GetRequiredService<UserManager<IdentityUser>>(),
                 serviceProvider.GetRequiredService<RoleManager<IdentityRole>>(),
                 serviceProvider.GetRequiredService<LokesNewsDbContext>()
             );
@@ -80,7 +80,7 @@ namespace Lokes_News_Add_Roles
         {
             var subTypes = new List<SubscriptionType>
             {
-                new SubscriptionType 
+                new SubscriptionType
                 {
                     TypeName = "Free",
                     Description = "Stay informed with our regular email newsletters.\nPerfect for casual readers who want custom updates delivered to their inbox.",
