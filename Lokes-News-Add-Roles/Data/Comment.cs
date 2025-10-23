@@ -11,5 +11,7 @@ public partial class Comment
 
     public string CommentContent { get; set; } = null!;
 
+    public string Author { get; set; } = null!;
+
     public virtual Article Article { get; set; } = null!;
 }

@@ -29,6 +29,10 @@ public partial class Article
 
     public string Author { get; set; } = null!;
 
+    public bool NeedsSubscription { get; set; }
+
+    public bool EditorsChoice { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();

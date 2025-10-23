@@ -49,8 +49,8 @@ public partial class LokesNewsDbContext : DbContext
                 .HasMaxLength(200)
                 .HasDefaultValue("");
             entity.Property(e => e.ContentSummary).HasMaxLength(1000);
-            entity.Property(e => e.Headline).HasMaxLength(50);
-            entity.Property(e => e.ImageUrl).HasMaxLength(200);
+            entity.Property(e => e.Headline).HasMaxLength(200);
+            entity.Property(e => e.ImageUrl).HasMaxLength(500);
             entity.Property(e => e.Slug).HasMaxLength(100);
 
             entity.HasMany(d => d.Categories).WithMany(p => p.Articles)
@@ -153,6 +153,8 @@ public partial class LokesNewsDbContext : DbContext
         modelBuilder.Entity<Comment>(entity =>
         {
             entity.HasIndex(e => e.ArticleId, "IX_Comments_ArticleId");
+
+            entity.Property(e => e.Author).HasDefaultValue("");
 
             entity.HasOne(d => d.Article).WithMany(p => p.Comments).HasForeignKey(d => d.ArticleId);
         });
