@@ -49,10 +49,10 @@ namespace Lokes_News_Add_Roles
 
             // Add methods bellow and call them here from the program object and using .Wait():
 
-            //program.AddRolesAsync().Wait();
-            //program.AddSubscriptionTypesAsync().Wait();
-            //program.AddCategoriesAsync().Wait();
-            //program.AddAdminAsync().Wait();
+            program.AddRolesAsync().Wait();
+            program.AddSubscriptionTypesAsync().Wait();
+            program.AddCategoriesAsync().Wait();
+            program.AddAdminAsync().Wait();
 
             // Remember to comment out the called Task after running it once
         }
