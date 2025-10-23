@@ -1,5 +1,6 @@
 ﻿using Lokes_News_Add_Roles.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Client;
@@ -11,23 +12,26 @@ namespace Lokes_News_Add_Roles
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly LokesNewsDbContext _context;
+        // Has to be changed if changing to new Db
+        private readonly LokesNewsSprint1DbContext _context;
+        private readonly GetIdentityDbContext _getIdentityDbContext;
 
-        public Program(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, LokesNewsDbContext context)
+        public Program(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, LokesNewsSprint1DbContext context, GetIdentityDbContext getIdentityDbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+            _getIdentityDbContext = getIdentityDbContext;
         }
 
         static void Main(string[] args)
         {
-            //ran: Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=LokesNewsDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -Tables AspNetRoles,AspNetUsers,AspNetUserRoles
+            //ran: Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=LokesNewsSprint1DB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -Tables AspNetRoles,AspNetUsers,AspNetUserRoles
 
             var connectionString = "Server=(localdb)\\mssqllocaldb;Database=LokesNewsSprint1DB;Trusted_Connection=True;";
             var services = new ServiceCollection();
 
-            services.AddDbContext<LokesNewsDbContext>(
+            services.AddDbContext<LokesNewsSprint1DbContext>(
                 options => options.UseSqlServer(connectionString));
 
             services.AddDbContext<GetIdentityDbContext>(
@@ -42,7 +46,8 @@ namespace Lokes_News_Add_Roles
             var program = new Program(
                 serviceProvider.GetRequiredService<UserManager<IdentityUser>>(),
                 serviceProvider.GetRequiredService<RoleManager<IdentityRole>>(),
-                serviceProvider.GetRequiredService<LokesNewsDbContext>()
+                serviceProvider.GetRequiredService<LokesNewsSprint1DbContext>(),
+                serviceProvider.GetRequiredService<GetIdentityDbContext>()
             );
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +140,9 @@ namespace Lokes_News_Add_Roles
 
         public async Task AddAdminAsync()
         {
-            var adminUser = await _context.AspNetUsers.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
+            var adminUser = await _context.AspNetUsers
+                .Where(u => u.Email == "admin@gmail.com")
+                .FirstOrDefaultAsync();
             if (adminUser == null)
             {
                 var user = new IdentityUser
@@ -146,10 +153,32 @@ namespace Lokes_News_Add_Roles
                     TwoFactorEnabled = false
                 };
                 await _userManager.CreateAsync(user, "Admin@1234");
-                var newUser = await _context.AspNetUsers.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
-                newUser!.FirstName = "Admin";
-                newUser.LastName = "Admin";
-                newUser.Dob = new DateTime(1990, 1, 1);
+                var idUser = await _getIdentityDbContext.Users.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
+                await _userManager.AddToRoleAsync(idUser, "Admin");
+                var newUser = new AspNetUser
+                {
+                    Id = idUser!.Id,
+                    UserName = idUser.UserName,
+                    NormalizedUserName = idUser.NormalizedUserName,
+                    Email = idUser.Email,
+                    NormalizedEmail = idUser.NormalizedEmail,
+                    EmailConfirmed = idUser.EmailConfirmed,
+                    PasswordHash = idUser.PasswordHash,
+                    SecurityStamp = idUser.SecurityStamp,
+                    ConcurrencyStamp = idUser.ConcurrencyStamp,
+                    PhoneNumber = idUser.PhoneNumber,
+                    PhoneNumberConfirmed = idUser.PhoneNumberConfirmed,
+                    TwoFactorEnabled = idUser.TwoFactorEnabled,
+                    LockoutEnd = idUser.LockoutEnd,
+                    LockoutEnabled = idUser.LockoutEnabled,
+                    AccessFailedCount = idUser.AccessFailedCount,
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    Dob = new DateTime(1990, 1, 1)
+                };
+                _getIdentityDbContext.Users.Remove(idUser);
+                _getIdentityDbContext.SaveChanges();
+                await _context.AspNetUsers.AddAsync(newUser);
                 await _context.SaveChangesAsync();
             }
             return;
