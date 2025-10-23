@@ -146,10 +146,10 @@ namespace Lokes_News_Add_Roles
                     TwoFactorEnabled = false
                 };
                 await _userManager.CreateAsync(user, "Admin@1234");
-                adminUser = await _context.AspNetUsers.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
-                adminUser!.FirstName = "Admin";
-                adminUser.LastName = "Admin";
-                adminUser.Dob = new DateTime(1990, 1, 1);
+                var newUser = await _context.AspNetUsers.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
+                newUser!.FirstName = "Admin";
+                newUser.LastName = "Admin";
+                newUser.Dob = new DateTime(1990, 1, 1);
                 await _context.SaveChangesAsync();
             }
             return;
