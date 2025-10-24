@@ -140,6 +140,14 @@ namespace Lokes_News_Add_Roles
 
         public async Task AddAdminAsync()
         {
+            // Removing FK dependent
+            _getIdentityDbContext.UserRoles.RemoveRange(_getIdentityDbContext.UserRoles);
+            _getIdentityDbContext.UserClaims.RemoveRange(_getIdentityDbContext.UserClaims);
+            _getIdentityDbContext.UserLogins.RemoveRange(_getIdentityDbContext.UserLogins);
+            _getIdentityDbContext.UserTokens.RemoveRange(_getIdentityDbContext.UserTokens);
+            // Removing the User
+            _getIdentityDbContext.Users.RemoveRange(_getIdentityDbContext.Users);
+            await _getIdentityDbContext.SaveChangesAsync();
             var adminUser = await _context.AspNetUsers
                 .Where(u => u.Email == "admin@gmail.com")
                 .FirstOrDefaultAsync();
@@ -155,6 +163,7 @@ namespace Lokes_News_Add_Roles
                 await _userManager.CreateAsync(user, "Admin@1234");
                 var idUser = await _getIdentityDbContext.Users.Where(u => u.Email == "admin@gmail.com").FirstOrDefaultAsync();
                 await _userManager.AddToRoleAsync(idUser, "Admin");
+                var roleClone = await _getIdentityDbContext.UserRoles.Where(ur => ur.UserId == idUser.Id).FirstOrDefaultAsync();
                 var newUser = new AspNetUser
                 {
                     Id = idUser!.Id,
@@ -180,6 +189,8 @@ namespace Lokes_News_Add_Roles
                 _getIdentityDbContext.SaveChanges();
                 await _context.AspNetUsers.AddAsync(newUser);
                 await _context.SaveChangesAsync();
+                await _getIdentityDbContext.UserRoles.AddAsync(roleClone!);
+                _getIdentityDbContext.SaveChanges();
             }
             return;
         }
