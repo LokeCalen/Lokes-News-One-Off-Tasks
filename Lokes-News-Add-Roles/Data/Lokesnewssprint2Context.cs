@@ -33,6 +33,8 @@ public partial class Lokesnewssprint2Context : DbContext
 
     public virtual DbSet<Comment> Comments { get; set; }
 
+    public virtual DbSet<Like> Likes { get; set; }
+
     public virtual DbSet<Subscription> Subscriptions { get; set; }
 
     public virtual DbSet<SubscriptionType> SubscriptionTypes { get; set; }
@@ -157,6 +159,19 @@ public partial class Lokesnewssprint2Context : DbContext
             entity.Property(e => e.Author).HasDefaultValue("");
 
             entity.HasOne(d => d.Article).WithMany(p => p.Comments).HasForeignKey(d => d.ArticleId);
+        });
+
+        modelBuilder.Entity<Like>(entity =>
+        {
+            entity.ToTable("Like");
+
+            entity.HasIndex(e => e.ArticleId, "IX_Like_ArticleId");
+
+            entity.HasIndex(e => e.UserId, "IX_Like_UserId");
+
+            entity.HasOne(d => d.Article).WithMany(p => p.LikesNavigation).HasForeignKey(d => d.ArticleId);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Likes).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<Subscription>(entity =>

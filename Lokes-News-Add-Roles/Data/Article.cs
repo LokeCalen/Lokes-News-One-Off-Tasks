@@ -35,5 +35,7 @@ public partial class Article
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+    public virtual ICollection<Like> LikesNavigation { get; set; } = new List<Like>();
+
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 }
