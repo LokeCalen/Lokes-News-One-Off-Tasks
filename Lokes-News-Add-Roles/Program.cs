@@ -184,7 +184,8 @@ namespace Lokes_News_Add_Roles
                     FirstName = "Admin",
                     LastName = "Admin",
                     Dob = new DateTime(1990, 1, 1)
-                };
+            }
+            ;
                 _getIdentityDbContext.Users.Remove(idUser);
                 _getIdentityDbContext.SaveChanges();
                 await _context.AspNetUsers.AddAsync(newUser);

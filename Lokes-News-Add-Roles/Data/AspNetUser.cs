@@ -47,6 +47,8 @@ public partial class AspNetUser
 
     public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 
+    public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
+
     public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 
     public virtual ICollection<AspNetRole> Roles { get; set; } = new List<AspNetRole>();
