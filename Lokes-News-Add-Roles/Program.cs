@@ -13,10 +13,10 @@ namespace Lokes_News_Add_Roles
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         // Has to be changed if changing to new Db
-        private readonly Lokesnewssprint2Context _context;
+        private readonly LokesnewsdbContext _context;
         private readonly GetIdentityDbContext _getIdentityDbContext;
 
-        public Program(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, Lokesnewssprint2Context     context, GetIdentityDbContext getIdentityDbContext)
+        public Program(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, LokesnewsdbContext context, GetIdentityDbContext getIdentityDbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -26,12 +26,12 @@ namespace Lokes_News_Add_Roles
 
         static void Main(string[] args)
         {
-            //ran: Scaffold-DbContext "Server=tcp:lokesnewsserver.database.windows.net,1433;Initial Catalog=lokesnewssprint2;Persist Security Info=False;User ID=admin1234;Password=Admin@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -Tables AspNetRoles,AspNetUsers,AspNetUserRoles
+            //ran: Scaffold-DbContext "Server=tcp:lokesnewsserver.database.windows.net,1433;Initial Catalog=lokesnewsdb;Persist Security Info=False;User ID=admin1234;Password=Admin@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data -Tables AspNetRoles,AspNetUsers,AspNetUserRoles
 
-            var connectionString = "Server=tcp:lokesnewsserver.database.windows.net,1433;Initial Catalog=lokesnewssprint2;Persist Security Info=False;User ID=admin1234;Password=Admin@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            var connectionString = "Server=tcp:lokesnewsserver.database.windows.net,1433;Initial Catalog=lokesnewsdb;Persist Security Info=False;User ID=admin1234;Password=Admin@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             var services = new ServiceCollection();
 
-            services.AddDbContext<Lokesnewssprint2Context>(
+            services.AddDbContext<LokesnewsdbContext>(
                 options => options.UseSqlServer(connectionString));
 
             services.AddDbContext<GetIdentityDbContext>(
@@ -46,7 +46,7 @@ namespace Lokes_News_Add_Roles
             var program = new Program(
                 serviceProvider.GetRequiredService<UserManager<IdentityUser>>(),
                 serviceProvider.GetRequiredService<RoleManager<IdentityRole>>(),
-                serviceProvider.GetRequiredService<Lokesnewssprint2Context>(),
+                serviceProvider.GetRequiredService<LokesnewsdbContext>(),
                 serviceProvider.GetRequiredService<GetIdentityDbContext>()
             );
 
@@ -184,7 +184,7 @@ namespace Lokes_News_Add_Roles
                     FirstName = "Admin",
                     LastName = "Admin",
                     Dob = new DateTime(1990, 1, 1)
-            }
+                }
             ;
                 _getIdentityDbContext.Users.Remove(idUser);
                 _getIdentityDbContext.SaveChanges();
