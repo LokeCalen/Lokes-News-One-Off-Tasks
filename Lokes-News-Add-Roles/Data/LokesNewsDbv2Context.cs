@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lokes_News_Add_Roles.Data;
 
-public partial class LokesnewsdbContext : DbContext
+public partial class LokesNewsDbv2Context : DbContext
 {
-    public LokesnewsdbContext()
+    public LokesNewsDbv2Context()
     {
     }
 
-    public LokesnewsdbContext(DbContextOptions<LokesnewsdbContext> options)
+    public LokesNewsDbv2Context(DbContextOptions<LokesNewsDbv2Context> options)
         : base(options)
     {
     }
@@ -41,7 +41,7 @@ public partial class LokesnewsdbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:lokesnewsserver.database.windows.net,1433;Initial Catalog=lokesnewsdb;Persist Security Info=False;User ID=admin1234;Password=Admin@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        => optionsBuilder.UseSqlServer("Server=tcp:lokesnewsserver.database.windows.net,1433;Initial Catalog=LokesNewsDBv2;Persist Security Info=False;User ID=admin1234;Password=Admin@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -163,11 +163,9 @@ public partial class LokesnewsdbContext : DbContext
 
         modelBuilder.Entity<Like>(entity =>
         {
-            entity.ToTable("Like");
+            entity.HasIndex(e => e.ArticleId, "IX_Likes_ArticleId");
 
-            entity.HasIndex(e => e.ArticleId, "IX_Like_ArticleId");
-
-            entity.HasIndex(e => e.UserId, "IX_Like_UserId");
+            entity.HasIndex(e => e.UserId, "IX_Likes_UserId");
 
             entity.HasOne(d => d.Article).WithMany(p => p.LikesNavigation).HasForeignKey(d => d.ArticleId);
 
